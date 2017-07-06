@@ -8,7 +8,16 @@ parser.add_argument('--image', '-i', help='Twitter screenshot image', required=T
 args = parser.parse_args()
 
 
+def _do_ocr_and_lookup(img_obj):
+    # Replace line breaks with a space and split text into an array
+    text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
+    print(text)
+    for element in text:
+        if element and element[0] == '@':
+            # Since handles cannot have spaces, strip until space
+            potential_user = element.split(' ')[0])
 
+    return potential_user
 
 def _blow_up_image():
     try:
