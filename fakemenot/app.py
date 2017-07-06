@@ -47,17 +47,20 @@ def _do_ocr_and_lookup(img_obj):
             # Nobody cares about re-tweets
             if 'RT ' not in tweet['text']:
                 if tweet not in tweets:
-                    tweets.append(tweet['text'])
+                    tweets.append((tweet['text'], tweet['id']))
                 if not limit_of_tweets:
                     break;
                 else:
                     limit_of_tweets -= 1
         body = text[text.index('')+1:]
-        stripped_body = body[:text.index('')]
-        print(stripped_body)
+        try:
+            stripped_body = body[:body.index('')]
+        except:
+            stripped_body = body
+
         for tweet in tweets:
             removed_elements = 0
-            ltweet, orig_len = tweet.split(' '), len(tweet.split(' '))
+            ltweet, orig_len = tweet[0].split(' '), len(tweet[0].split(' '))
             for ele in stripped_body:
                 if ele in ltweet:
                     removed_elements += 1
@@ -66,7 +69,7 @@ def _do_ocr_and_lookup(img_obj):
             if removal_rate > 75.0 :
                 print("*** Tweet is probably real! ***")
                 print("-> Confidence : " + str(removal_rate))
-                print("-> Matched Tweet : " + tweet )
+                print("-> URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]))
 
 
     except TwitterSearchException as e: # catch all those ugly errors
