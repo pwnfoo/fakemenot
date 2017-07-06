@@ -10,10 +10,13 @@ Please don't hate me for doing this right after import
 (and for this ugly multiline comment)'''
 parser = argparse.ArgumentParser(description='Process images')
 parser.add_argument('--image', '-i', help='Twitter screenshot image', required=True)
+parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=100)
+
 args = parser.parse_args()
 
 
 def _do_ocr_and_lookup(img_obj):
+    limit_of_tweets = int(args.limit)
     # Replace line breaks with a space and split text into an array
     text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
     for element in text:
@@ -39,9 +42,32 @@ def _do_ocr_and_lookup(img_obj):
             access_token = access_token,
             access_token_secret = access_token_secret
         )
-
+        tweets = []
         for tweet in ts.search_tweets_iterable(tuo):
-            print(tweet['text'])
+            # Nobody cares about re-tweets
+            if 'RT ' not in tweet['text']:
+                if tweet not in tweets:
+                    tweets.append(tweet['text'])
+                if not limit_of_tweets:
+                    break;
+                else:
+                    limit_of_tweets -= 1
+        body = text[text.index('')+1:]
+        stripped_body = body[:text.index('')]
+        print(stripped_body)
+        for tweet in tweets:
+            removed_elements = 0
+            ltweet, orig_len = tweet.split(' '), len(tweet.split(' '))
+            for ele in stripped_body:
+                if ele in ltweet:
+                    removed_elements += 1
+                    ltweet.remove(ele)
+            removal_rate = (removed_elements/float(orig_len))*100
+            if removal_rate > 75.0 :
+                print("*** Tweet is probably real! ***")
+                print("-> Confidence : " + str(removal_rate))
+                print("-> Matched Tweet : " + tweet )
+
 
     except TwitterSearchException as e: # catch all those ugly errors
         print(e)
