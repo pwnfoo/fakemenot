@@ -1,3 +1,13 @@
+'''
+This program uses pytesseract to do OCR on images.
+Make sure you have the following packages installed on the system :
+
+* tesseract
+* tesseract-data-eng
+
+Tested on Arch Linux - Rolling
+'''
+
 import argparse
 import pytesseract
 import configparser
