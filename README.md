@@ -1,5 +1,5 @@
 # fakemenot
-Python CLI app to detect if a screenshot of a tweet is genuine. Work in Progress
+Python CLI app to detect if a screenshot of a tweet is genuine. Work in Progress.
 
 ### Requriements
 
@@ -21,7 +21,7 @@ Path to the screenshot image of tweet. Only works on Desktop screenshots.
 
 * `--limit/-l`
 
-Specify the number of tweets to pull from the detected user. Defaults to 100. Retweets are not pulled.
+Specify the number of tweets to pull from the detected user. Defaults to 100. Retweets are not pulled and does not affect the limit.
 
 
 ### Image Samples 
