@@ -9,7 +9,7 @@ Python CLI app to detect if a screenshot of a tweet is genuine. Work in Progress
 ### Setting Up
 
 * Run `python setup.py install` to install requirements. Install script is still a work in progress.
-* Copy `fakemenot/twitter.config` to ~/.fakemenot.config
+* `[ ! -f ~/.fakemenot.config ] && cp fakemenot/twitter.config ~/.fakemenot.config`
 * Go to https://apps.twitter.com/app/new and put your consumer and API keys in `~/.fakemenot.config`
 * Run `fakemenot` after installation. Setup will install it in your path.
 

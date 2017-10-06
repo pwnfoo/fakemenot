@@ -21,7 +21,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 Please don't hate me for doing this right after import
 (and for this ugly multiline comment)'''
 parser = argparse.ArgumentParser(description='Process images')
-parser.add_argument('--image', '-i', help='Twitter screenshot image') # , required=True)
+parser.add_argument('--image', '-i', help='Twitter screenshot image', required=True)
 parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=100)
 parser.add_argument('--config', '-c', help='Path to twitter config (default: ~/.fakemenot.config)', default="~/.fakemenot.config")
 
