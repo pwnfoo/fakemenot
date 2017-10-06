@@ -31,7 +31,7 @@ Specify the number of tweets to pull from the detected user. Defaults to 100. Re
 
 * `--config/-c`
 
-Specify an alternate configuration file containing your twitter identification and authentication material.  Defaults to ~/.twitter.config
+Specify an alternate configuration file containing your twitter identification and authentication material.  Defaults to ~/.fakemenot.config
 
 ### Image Samples 
 
