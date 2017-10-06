@@ -78,7 +78,7 @@ def _do_ocr_and_lookup(img_obj):
             removal_rate = (removed_elements/float(orig_len))*100
             if removal_rate > 75.0 :
                 print("*** Tweet is probably real! ***")
-                print("-> Confidence : " + str(removal_rate))
+                print("-> Confidence : " + "%.2f"%removal_rate + "%")
                 print("-> URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]))
 
 
