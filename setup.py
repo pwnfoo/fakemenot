@@ -29,7 +29,7 @@ with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 # Where the magic happens:
 setup(
     name=NAME,
-    version='0.0.1',
+    version='0.0.2',
     description=DESCRIPTION,
     entry_points={
         'console_scripts': [
