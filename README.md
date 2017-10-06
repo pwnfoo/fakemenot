@@ -9,8 +9,9 @@ Python CLI app to detect if a screenshot of a tweet is genuine. Work in Progress
 ### Setting Up
 
 * Run `python setup.py install` to install requirements. Install script is still a work in progress.
-* Run `python fakemenot/app.py` after installation.
-* Go to https://apps.twitter.com/app/new and put your consumer and API keys in `fakemenot/twitter.config`
+* `[ ! -f ~/.fakemenot.config ] && cp fakemenot/twitter.config ~/.fakemenot.config`
+* Go to https://apps.twitter.com/app/new and put your consumer and API keys in `~/.fakemenot.config`
+* Run `fakemenot` after installation. Setup will install it in your path.
 
 ### Limitations
 * Since it does OCR on the image, detection rate will vary on the quality of the screenshot.
@@ -27,6 +28,10 @@ Path to the screenshot image of tweet. Only works on Desktop screenshots.
 
 Specify the number of tweets to pull from the detected user. Defaults to 100. Retweets are not pulled and does not affect the limit.
 
+
+* `--config/-c`
+
+Specify an alternate configuration file containing your twitter identification and authentication material.  Defaults to ~/.fakemenot.config
 
 ### Image Samples 
 

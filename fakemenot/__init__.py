@@ -9,6 +9,8 @@ Tested on Arch Linux - Rolling
 '''
 
 import argparse
+import os
+import sys
 import pytesseract
 import configparser
 from TwitterSearch import *
@@ -21,11 +23,23 @@ Please don't hate me for doing this right after import
 parser = argparse.ArgumentParser(description='Process images')
 parser.add_argument('--image', '-i', help='Twitter screenshot image', required=True)
 parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=100)
+parser.add_argument('--config', '-c', help='Path to twitter config (default: ~/.fakemenot.config)', default="~/.fakemenot.config")
 
 args = parser.parse_args()
 
+def get_config():
+    config = configparser.RawConfigParser()
+    try:
+        with open(os.path.expanduser(args.config)) as config_file: 
+            config.readfp(config_file)
+    except IOError as ioe:
+        print("Couldn't open the config file {} because {}".format(
+            args.config, ioe))
+        sys.exit(2)
+    return config
 
 def _do_ocr_and_lookup(img_obj):
+    config = get_config()
     limit_of_tweets = int(args.limit)
     # Replace line breaks with a space and split text into an array
     text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
@@ -34,9 +48,6 @@ def _do_ocr_and_lookup(img_obj):
             # Since handles cannot have spaces, strip until space
             potential_user = element.split(' ')[0]
             break;
-
-    config = configparser.RawConfigParser()
-    config.readfp(open('twitter.config'))
 
     # Just in case, the dude/dudette using the program puts in ' or " in the config.
     consumer_key = config.get('twitter', 'consumer_key').replace('\'', '').replace('\"', '')
