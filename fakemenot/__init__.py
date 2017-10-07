@@ -100,10 +100,6 @@ def _do_ocr_and_lookup(img_obj):
                 print(colored("[*] This might be a valid tweet", 'yellow'))
                 print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow'))
                 print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'yellow'))
-            elif removal_rate  < 50.0:
-                print(colored("[*] This is probably not it", 'red'))
-                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'red'))
-                print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'red'))
 
 
     except TwitterSearchException as e: # catch all those ugly errors
