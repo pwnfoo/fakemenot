@@ -1,0 +1,7 @@
+language: python
+sudo: enabled
+before_install: sudo apt-get -y update && sudo apt-get -y install tesseract-ocr tesseract-ocr-eng wget && wget https://camo.githubusercontent.com/ebde26d831087c2538a54869c57029c3f994b7c4/687474703a2f2f692e696d6775722e636f6d2f356f44656f78762e706e67 -o ~/testimg.png
+install:
+    sudo python setup.py install
+script:
+    fakemenot -i ~/testimg.png -l 999999
