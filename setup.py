@@ -17,6 +17,7 @@ AUTHOR = 'me@sachinwrites.xyz'
 REQUIRED = [
     'pytesseract',
     'twittersearch',
+    'termcolor',
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))

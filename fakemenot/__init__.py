@@ -15,14 +15,14 @@ import pytesseract
 import configparser
 from TwitterSearch import *
 from PIL import Image, ImageEnhance, ImageFilter
-
+from termcolor import colored
 
 '''Parses parameters for getting image input.
 Please don't hate me for doing this right after import
 (and for this ugly multiline comment)'''
 parser = argparse.ArgumentParser(description='Process images')
 parser.add_argument('--image', '-i', help='Twitter screenshot image', required=True)
-parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=100)
+parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=250)
 parser.add_argument('--config', '-c', help='Path to twitter config (default: ~/.fakemenot.config)', default="~/.fakemenot.config")
 
 args = parser.parse_args()
@@ -30,11 +30,11 @@ args = parser.parse_args()
 def get_config():
     config = configparser.RawConfigParser()
     try:
-        with open(os.path.expanduser(args.config)) as config_file: 
+        with open(os.path.expanduser(args.config)) as config_file:
             config.readfp(config_file)
     except IOError as ioe:
-        print("Couldn't open the config file {} because {}".format(
-            args.config, ioe))
+        print colored("Couldn't open the config file {} because {}".format(
+            args.config, ioe), 'red')
         sys.exit(2)
     return config
 
@@ -73,24 +73,30 @@ def _do_ocr_and_lookup(img_obj):
                     break;
                 else:
                     limit_of_tweets -= 1
+
+        # The most probable tweet body is this.
         body = text[text.index('')+1:]
         try:
+            # Remove all timestamps and other text OCR'd
             stripped_body = body[:body.index('')]
         except:
             stripped_body = body
 
+        # Check against every tweet pulled
         for tweet in tweets:
             removed_elements = 0
             ltweet, orig_len = tweet[0].split(' '), len(tweet[0].split(' '))
+            # Compare each element of body to element in body. TODO: Optimize
             for ele in stripped_body:
                 if ele in ltweet:
                     removed_elements += 1
                     ltweet.remove(ele)
             removal_rate = (removed_elements/float(orig_len))*100
             if removal_rate > 75.0 :
-                print("*** Tweet is probably real! ***")
-                print("-> Confidence : " + "%.2f"%removal_rate + "%")
-                print("-> URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]))
+                print colored("[*] It looks like this is a valid tweet", 'green')
+                print colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow')
+                print colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'blue')
+                break;
 
 
     except TwitterSearchException as e: # catch all those ugly errors
@@ -101,7 +107,7 @@ def _blow_up_image():
     try:
         img = Image.open(args.image)
     except FileNotFoundError:
-        print("[!] I couldn't find a file by that name. Fake you!")
+        print colored("[!] I couldn't find a file by that name. Fake you!", 'red')
         return False
 
     basewidth = 2500
