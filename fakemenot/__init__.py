@@ -95,8 +95,9 @@ def _do_ocr_and_lookup(img_obj):
             if removal_rate > 75.0 :
                 print("[*] It looks like this is a valid tweet")
                 print("-> Confidence : " + "%.2f"%removal_rate + "%")
-                print("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]))
-                break;
+                print("-> Potential URL : https://twitter.com/" +
+                      potential_user[1:] + "/status/" + str(tweet[1]))
+                break
 
 
     except TwitterSearchException as e: # catch all those ugly errors
@@ -106,14 +107,14 @@ def _do_ocr_and_lookup(img_obj):
 def _blow_up_image():
     try:
         img = Image.open(args.image)
-    except FileNotFoundError:
+    except (OSError, IOError) as e:
         print("[!] I couldn't find a file by that name. Fake you!")
         return False
 
     basewidth = 2500
     img = Image.open(args.image)
-    wpercent = (basewidth/float(img.size[0]))
-    hsize = int((float(img.size[1])*float(wpercent)))
+    wpercent = (basewidth / float(img.size[0]))
+    hsize = int((float(img.size[1]) * float(wpercent)))
     # Resize happens here
     img = img.resize((basewidth,hsize), Image.ANTIALIAS)
 
