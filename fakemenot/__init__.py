@@ -15,7 +15,7 @@ import pytesseract
 import configparser
 from TwitterSearch import *
 from PIL import Image, ImageEnhance, ImageFilter
-
+from termcolor import colored
 
 '''Parses parameters for getting image input.
 Please don't hate me for doing this right after import
@@ -33,8 +33,8 @@ def get_config():
         with open(os.path.expanduser(args.config)) as config_file:
             config.readfp(config_file)
     except IOError as ioe:
-        print("Couldn't open the config file {} because {}".format(
-            args.config, ioe))
+        print colored("Couldn't open the config file {} because {}".format(
+            args.config, ioe), 'red')
         sys.exit(2)
     return config
 
@@ -93,9 +93,9 @@ def _do_ocr_and_lookup(img_obj):
                     ltweet.remove(ele)
             removal_rate = (removed_elements/float(orig_len))*100
             if removal_rate > 75.0 :
-                print("[*] It looks like this is a valid tweet")
-                print("-> Confidence : " + "%.2f"%removal_rate + "%")
-                print("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]))
+                print colored("[*] It looks like this is a valid tweet", 'green')
+                print colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow')
+                print colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'blue')
                 break;
 
 
@@ -107,7 +107,7 @@ def _blow_up_image():
     try:
         img = Image.open(args.image)
     except FileNotFoundError:
-        print("[!] I couldn't find a file by that name. Fake you!")
+        print colored("[!] I couldn't find a file by that name. Fake you!", 'red')
         return False
 
     basewidth = 2500
