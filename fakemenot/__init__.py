@@ -96,7 +96,7 @@ def _do_ocr_and_lookup(img_obj):
                 print colored("[*] It looks like this is a valid tweet", 'green')
                 print colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow')
                 print colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'blue')
-                break;
+                break
 
 
     except TwitterSearchException as e: # catch all those ugly errors
@@ -106,14 +106,14 @@ def _do_ocr_and_lookup(img_obj):
 def _blow_up_image():
     try:
         img = Image.open(args.image)
-    except FileNotFoundError:
+    except (OSError, IOError) as e:
         print colored("[!] I couldn't find a file by that name. Fake you!", 'red')
         return False
 
     basewidth = 2500
     img = Image.open(args.image)
-    wpercent = (basewidth/float(img.size[0]))
-    hsize = int((float(img.size[1])*float(wpercent)))
+    wpercent = (basewidth / float(img.size[0]))
+    hsize = int((float(img.size[1]) * float(wpercent)))
     # Resize happens here
     img = img.resize((basewidth,hsize), Image.ANTIALIAS)
 
