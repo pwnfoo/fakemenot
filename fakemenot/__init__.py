@@ -33,8 +33,8 @@ def get_config():
         with open(os.path.expanduser(args.config)) as config_file:
             config.readfp(config_file)
     except IOError as ioe:
-        print colored("Couldn't open the config file {} because {}".format(
-            args.config, ioe), 'red')
+        print(colored("Couldn't open the config file {} because {}".format(
+            args.config, ioe), 'red'))
         sys.exit(2)
     return config
 
@@ -92,11 +92,14 @@ def _do_ocr_and_lookup(img_obj):
                     removed_elements += 1
                     ltweet.remove(ele)
             removal_rate = (removed_elements/float(orig_len))*100
-            if removal_rate > 75.0 :
-                print colored("[*] It looks like this is a valid tweet", 'green')
-                print colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow')
-                print colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'blue')
-                break
+            if removal_rate in range(75, 100):
+                print(colored("[*] It looks like this is a valid tweet", 'green'))
+                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'green'))
+                print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'green'))
+            elif removal_rate in (50, 75):
+                print(colored("[*] This might be a valid tweet", 'yellow'))
+                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow'))
+                print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'yellow'))
 
 
     except TwitterSearchException as e: # catch all those ugly errors
@@ -107,7 +110,7 @@ def _blow_up_image():
     try:
         img = Image.open(args.image)
     except (OSError, IOError) as e:
-        print colored("[!] I couldn't find a file by that name. Fake you!", 'red')
+        print(colored("[!] I couldn't find a file by that name. Fake you!", 'red'))
         return False
 
     basewidth = 2500
