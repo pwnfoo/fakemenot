@@ -7,6 +7,12 @@ Python CLI app to detect if a screenshot of a tweet is genuine. Work in Progress
 * tesseract-data-eng
 
 ### Setting Up
+* Install `tesseract` and `tesseract-data-eng` packages.
+
+  * Ubuntu (and other debian based) : `sudo apt-get install tessearct-ocr tesseract-data-eng`
+  * Fedora : `sudo dnf install tessearct`
+  * Arch Linux: `sudo pacman -S tesseract tesseract-data-eng`
+  
 
 * Run `python setup.py install` to install requirements. Install script is still a work in progress.
 * `[ ! -f ~/.fakemenot.config ] && cp fakemenot/twitter.config ~/.fakemenot.config`
@@ -42,3 +48,4 @@ Tweet by @mattdm:
 Output:
 
 ![](http://i.imgur.com/05ZeCxL.png)
+
