@@ -71,6 +71,7 @@ def _do_ocr_and_lookup(img_obj):
             access_token_secret = access_token_secret
         )
         tweets = []
+        body = '__awesomebody__'
         for tweet in ts.search_tweets_iterable(tuo):
             # Nobody cares about re-tweets
             if 'RT ' not in tweet['text']:
@@ -87,7 +88,11 @@ def _do_ocr_and_lookup(img_obj):
         except:
             body = text[text.index('v')+1:]
 
-
+        # If none of that was found, let's report an OCR error
+        if body == '__awesomebody__':
+            print(colored("[*] It looks like OCR failed. Please make sure you "+
+                          "crop the image as in sample and is readable.", 'red'))
+            
         found_tweet = False
         # Check against every tweet pulled
         for tweet in tweets:
