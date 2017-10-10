@@ -46,7 +46,7 @@ def _do_ocr_and_lookup(img_obj):
     text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
     for element in text:
         if element and element[0] == '@':
-            print element
+            print("Detected handle : " + str(element))
             # Since handles cannot have spaces, strip until space
             potential_user = element.split(' ')[0]
             break;
@@ -85,8 +85,8 @@ def _do_ocr_and_lookup(img_obj):
         try:
             body = text[text.index('V')+1:]
         except:
-            print(colored("[*] It looks like OCR failed. Please make sure you "+
-                          "crop the image as in sample and is readable.", 'red'))
+            body = text[text.index('v')+1:]
+
 
         found_tweet = False
         # Check against every tweet pulled
