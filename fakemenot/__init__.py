@@ -51,7 +51,7 @@ def _do_ocr_and_lookup(img_obj):
             potential_user = element.split(' ')[0]
             break;
 
-    # Just in case, the dude/dudette using the program puts in ' or " in the config.
+    # Just in case the person Yousing the program puts in ' or " in the config.
     consumer_key = config.get('twitter', 'consumer_key').replace('\'', '').replace('\"', '')
     consumer_secret = config.get('twitter', 'consumer_secret').replace('\'', '').replace('\"', '')
     access_token = config.get('twitter', 'access_token').replace('\'', '').replace('\"', '')
@@ -91,8 +91,8 @@ def _do_ocr_and_lookup(img_obj):
         # If none of that was found, let's report an OCR error
         if body == '__awesomebody__':
             print(colored("[*] It looks like OCR failed. Please make sure you "+
-                          "crop the image as in sample and is readable.", 'red'))
-            
+                          "crop image as in sample and is readable.", 'red'))
+
         found_tweet = False
         # Check against every tweet pulled
         for tweet in tweets:
@@ -107,17 +107,27 @@ def _do_ocr_and_lookup(img_obj):
 
             if int(removal_rate) in range(75, 100):
                 found_tweet = True
-                print(colored("[*] It looks like this is a valid tweet", 'green'))
-                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'green'))
-                print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'green'))
+                print(colored("[*] It looks like this is a valid tweet",
+                              'green'))
+                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%",
+                              'green'))
+                print(colored("-> Potential URL : https://twitter.com/"+\
+                              potential_user[1:]+\
+                              "/status/"+str(tweet[1]), 'green'))
+
             elif int(removal_rate) in (55, 75):
                 found_tweet = True
                 print(colored("[*] This might be a valid tweet", 'yellow'))
-                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow'))
-                print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'yellow'))
+                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%",
+                              'yellow'))
+                print(colored("-> Potential URL : https://twitter.com/"+\
+                              potential_user[1:]+\
+                              "/status/"+str(tweet[1]), 'yellow'))
 
         if not found_tweet:
-            print(colored("[*] I couldn't find a tweet like that. Try increasing the limit to pull more tweets", 'yellow'))
+            print(colored("[*] I couldn't find a tweet like that. "+\
+                          "Try increasing the limit to pull more tweets",\
+                           'yellow'))
 
     except TwitterSearchException as e: # catch all those ugly errors
         print(e)
@@ -127,7 +137,8 @@ def _blow_up_image():
     try:
         img = Image.open(args.image)
     except (OSError, IOError) as e:
-        print(colored("[!] I couldn't find a file by that name. Fake you!", 'red'))
+        print(colored("[!] I couldn't find a file by that name. Fake you!",
+                      'red'))
         return False
 
     basewidth = 2500
