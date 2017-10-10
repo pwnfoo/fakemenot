@@ -41,10 +41,12 @@ def get_config():
 def _do_ocr_and_lookup(img_obj):
     config = get_config()
     limit_of_tweets = int(args.limit)
+    potential_user = '__fakemenot__'
     # Replace line breaks with a space and split text into an array
     text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
     for element in text:
         if element and element[0] == '@':
+            print element
             # Since handles cannot have spaces, strip until space
             potential_user = element.split(' ')[0]
             break;
@@ -54,6 +56,11 @@ def _do_ocr_and_lookup(img_obj):
     consumer_secret = config.get('twitter', 'consumer_secret').replace('\'', '').replace('\"', '')
     access_token = config.get('twitter', 'access_token').replace('\'', '').replace('\"', '')
     access_token_secret = config.get('twitter', 'access_token_secret').replace('\'', '').replace('\"', '')
+
+    if potential_user == '__fakemenot__':
+        print(colored("[*] It looks like OCR failed. Please make sure you "+
+                      "crop the image as in sample and is readable.", 'red'))
+        exit(1)
 
     try:
         tuo = TwitterUserOrder(potential_user[1:])
@@ -75,32 +82,37 @@ def _do_ocr_and_lookup(img_obj):
                     limit_of_tweets -= 1
 
         # The most probable tweet body is this.
-        body = text[text.index('')+1:]
         try:
-            # Remove all timestamps and other text OCR'd
-            stripped_body = body[:body.index('')]
+            body = text[text.index('V')+1:]
         except:
-            stripped_body = body
+            print(colored("[*] It looks like OCR failed. Please make sure you "+
+                          "crop the image as in sample and is readable.", 'red'))
 
+        found_tweet = False
         # Check against every tweet pulled
         for tweet in tweets:
             removed_elements = 0
             ltweet, orig_len = tweet[0].split(' '), len(tweet[0].split(' '))
             # Compare each element of body to element in body. TODO: Optimize
-            for ele in stripped_body:
+            for ele in body:
                 if ele in ltweet:
                     removed_elements += 1
                     ltweet.remove(ele)
             removal_rate = (removed_elements/float(orig_len))*100
-            if removal_rate in range(75, 100):
+
+            if int(removal_rate) in range(75, 100):
+                found_tweet = True
                 print(colored("[*] It looks like this is a valid tweet", 'green'))
                 print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'green'))
                 print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'green'))
-            elif removal_rate in (50, 75):
+            elif int(removal_rate) in (55, 75):
+                found_tweet = True
                 print(colored("[*] This might be a valid tweet", 'yellow'))
                 print(colored("-> Confidence : " + "%.2f"%removal_rate + "%", 'yellow'))
                 print(colored("-> Potential URL : https://twitter.com/"+potential_user[1:]+"/status/"+str(tweet[1]), 'yellow'))
 
+        if not found_tweet:
+            print(colored("[*] I couldn't find a tweet like that. Try increasing the limit to pull more tweets", 'yellow'))
 
     except TwitterSearchException as e: # catch all those ugly errors
         print(e)
