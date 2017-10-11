@@ -17,15 +17,22 @@ from TwitterSearch import *
 from PIL import Image, ImageEnhance, ImageFilter
 from termcolor import colored
 
-'''Parses parameters for getting image input.
-Please don't hate me for doing this right after import
-(and for this ugly multiline comment)'''
+
 parser = argparse.ArgumentParser(description='Process images')
-parser.add_argument('--image', '-i', help='Twitter screenshot image', required=True)
+parser.add_argument(
+    '--image',
+    '-i',
+    help='Twitter screenshot image',
+    required=True)
 parser.add_argument('--limit', '-l', help='Limit tweets pulled', default=250)
-parser.add_argument('--config', '-c', help='Path to twitter config (default: ~/.fakemenot.config)', default="~/.fakemenot.config")
+parser.add_argument(
+    '--config',
+    '-c',
+    help='Path to twitter config (default: ~/.fakemenot.config)',
+    default="~/.fakemenot.config")
 
 args = parser.parse_args()
+
 
 def get_config():
     config = configparser.RawConfigParser()
@@ -38,37 +45,56 @@ def get_config():
         sys.exit(2)
     return config
 
+
 def _do_ocr_and_lookup(img_obj):
     config = get_config()
     limit_of_tweets = int(args.limit)
     potential_user = '__fakemenot__'
     # Replace line breaks with a space and split text into an array
-    text = pytesseract.image_to_string(img_obj, lang='eng').replace('\n', ' ').split(' ')
+    text = pytesseract.image_to_string(
+        img_obj, lang='eng').replace(
+        '\n', ' ').split(' ')
     for element in text:
         if element and element[0] == '@':
             print("Detected handle : " + str(element))
             # Since handles cannot have spaces, strip until space
             potential_user = element.split(' ')[0]
-            break;
+            break
 
     # Just in case the person Yousing the program puts in ' or " in the config.
-    consumer_key = config.get('twitter', 'consumer_key').replace('\'', '').replace('\"', '')
-    consumer_secret = config.get('twitter', 'consumer_secret').replace('\'', '').replace('\"', '')
-    access_token = config.get('twitter', 'access_token').replace('\'', '').replace('\"', '')
-    access_token_secret = config.get('twitter', 'access_token_secret').replace('\'', '').replace('\"', '')
+    consumer_key = config.get(
+        'twitter',
+        'consumer_key')..replace(
+            '\'','').replace(
+                '\"','')
+    consumer_secret = config.get(
+        'twitter',
+        'consumer_secret').replace(
+            '\'','').replace(
+                '\"','')
+    access_token = config.get(
+        'twitter',
+        'access_token').replace(
+            '\'','').replace(
+                '\"','')
+    access_token_secret = config.get(
+        'twitter',
+        'access_token_secret').replace(
+            '\'','').replace(
+                '\"','')
 
     if potential_user == '__fakemenot__':
-        print(colored("[*] It looks like OCR failed. Please make sure you "+
-                      "crop the image as in sample and is readable.", 'red'))
+        print(colored("[*] It looks like OCR failed. Please make sure you " +
+            "crop the image as in sample and is readable.", 'red'))
         exit(1)
 
     try:
         tuo = TwitterUserOrder(potential_user[1:])
         ts = TwitterSearch(
-            consumer_key = consumer_key,
-            consumer_secret = consumer_secret,
-            access_token = access_token,
-            access_token_secret = access_token_secret
+            consumer_key=consumer_key,
+            consumer_secret=consumer_secret,
+            access_token=access_token,
+            access_token_secret=access_token_secret
         )
         tweets = []
         body = '__awesomebody__'
@@ -78,19 +104,19 @@ def _do_ocr_and_lookup(img_obj):
                 if tweet not in tweets:
                     tweets.append((tweet['text'], tweet['id']))
                 if not limit_of_tweets:
-                    break;
+                    break
                 else:
                     limit_of_tweets -= 1
 
         # The most probable tweet body is this.
         try:
-            body = text[text.index('V')+1:]
-        except:
-            body = text[text.index('v')+1:]
+            body = text[text.index('V') + 1:]
+        except BaseException:
+            body = text[text.index('v') + 1:]
 
         # If none of that was found, let's report an OCR error
         if body == '__awesomebody__':
-            print(colored("[*] It looks like OCR failed. Please make sure you "+
+            print(colored("[*] It looks like OCR failed.Please make sure you " +
                           "crop image as in sample and is readable.", 'red'))
 
         found_tweet = False
@@ -103,40 +129,40 @@ def _do_ocr_and_lookup(img_obj):
                 if ele in ltweet:
                     removed_elements += 1
                     ltweet.remove(ele)
-            removal_rate = (removed_elements/float(orig_len))*100
+            removal_rate = (removed_elements / float(orig_len)) * 100
 
             if int(removal_rate) in range(75, 100):
                 found_tweet = True
                 print(colored("[*] It looks like this is a valid tweet",
                               'green'))
-                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%",
+                print(colored("-> Confidence : " + "%.2f" % removal_rate + "%",
                               'green'))
-                print(colored("-> Potential URL : https://twitter.com/"+\
-                              potential_user[1:]+\
-                              "/status/"+str(tweet[1]), 'green'))
+                print(colored("-> Potential URL : https://twitter.com/" +
+                              potential_user[1:] +
+                              "/status/" + str(tweet[1]), 'green'))
 
             elif int(removal_rate) in (55, 75):
                 found_tweet = True
                 print(colored("[*] This might be a valid tweet", 'yellow'))
-                print(colored("-> Confidence : " + "%.2f"%removal_rate + "%",
+                print(colored("-> Confidence : " + "%.2f" % removal_rate + "%",
                               'yellow'))
-                print(colored("-> Potential URL : https://twitter.com/"+\
-                              potential_user[1:]+\
-                              "/status/"+str(tweet[1]), 'yellow'))
+                print(colored("-> Potential URL : https://twitter.com/" +
+                              potential_user[1:] +
+                              "/status/" + str(tweet[1]), 'yellow'))
 
         if not found_tweet:
-            print(colored("[*] I couldn't find a tweet like that. "+\
-                          "Try increasing the limit to pull more tweets",\
-                           'yellow'))
+            print(colored("[*] I couldn't find a tweet like that. " +
+                          "Try increasing the limit to pull more tweets",
+                          'yellow'))
 
-    except TwitterSearchException as e: # catch all those ugly errors
+    except TwitterSearchException as e:  # catch all those ugly errors
         print(e)
 
 
 def _blow_up_image():
     try:
         img = Image.open(args.image)
-    except (OSError, IOError) as e:
+    except (OSError, IOError):
         print(colored("[!] I couldn't find a file by that name. Fake you!",
                       'red'))
         return False
@@ -146,7 +172,7 @@ def _blow_up_image():
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
     # Resize happens here
-    img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+    img = img.resize((basewidth, hsize), Image.ANTIALIAS)
 
     # Thanks Stack Overflow <3 : https://stackoverflow.com/a/37750605/5486120
     img = img.filter(ImageFilter.MedianFilter())
