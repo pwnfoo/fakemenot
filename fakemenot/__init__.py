@@ -64,7 +64,7 @@ def _do_ocr_and_lookup(img_obj):
     # Just in case the person Yousing the program puts in ' or " in the config.
     consumer_key = config.get(
         'twitter',
-        'consumer_key')..replace(
+        'consumer_key').replace(
             '\'','').replace(
                 '\"','')
     consumer_secret = config.get(
