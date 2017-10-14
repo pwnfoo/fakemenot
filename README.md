@@ -49,3 +49,23 @@ Output:
 
 ![](http://i.imgur.com/05ZeCxL.png)
 
+**Blurry image**
+
+Tweet by @elahmo: 
+
+![](https://i.imgur.com/QI6ZOrA.png)
+
+Output:
+
+![](https://i.imgur.com/FY5jTJT.png)
+
+**Fake image**
+
+Tweet by @elahmo: 
+
+![](https://i.imgur.com/zoDkJnf.png)
+
+Output:
+
+![](https://i.imgur.com/rd85pia.png)
+
