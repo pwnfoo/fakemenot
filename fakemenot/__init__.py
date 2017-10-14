@@ -111,8 +111,8 @@ def _do_ocr_and_lookup(img_obj):
         # The most probable tweet body is this.
         try:
             body = text[text.index('V') + 1:]
-        except BaseException:
-            body = text[text.index('v') + 1:]
+        except ValueError:
+            body = text
 
         # If none of that was found, let's report an OCR error
         if body == '__awesomebody__':
