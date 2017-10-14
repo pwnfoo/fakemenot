@@ -131,7 +131,7 @@ def _do_ocr_and_lookup(img_obj):
                     ltweet.remove(ele)
             removal_rate = (removed_elements / float(orig_len)) * 100
 
-            if int(removal_rate) in range(75, 100):
+            if int(removal_rate) > 75:
                 found_tweet = True
                 print(colored("[*] It looks like this is a valid tweet",
                               'green'))
