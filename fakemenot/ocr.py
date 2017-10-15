@@ -25,7 +25,7 @@ def find_user_and_text_in_tweet_image(image_path):
 
 def extract_values_from_desktop_tweet(words):
     # Find user handle in words
-    user = next((w for w in words if (w and w[0] == '@')), None)
+    user = next((w for w in words if (w and len(w) > 1 and w[0] == '@')), None)
 
     # Find the tweet text body
     body = None
@@ -47,7 +47,7 @@ def prepare_image_for_ocr(image_path):
         return None
 
     # Resize image
-    width = 2500.0
+    width = 4096.0
     height = width / image.size[0] * image.size[1]
     image = image.resize((int(width), int(height)), Image.ANTIALIAS)
 
