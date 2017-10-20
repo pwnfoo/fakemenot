@@ -49,6 +49,14 @@ Output:
 
 ![](http://i.imgur.com/05ZeCxL.png)
 
+Tweet by @kumailn
+
+![](https://i.imgur.com/2b6CLR8.png)
+
+Tweet by @TheEconomist
+
+![](https://i.imgur.com/dLwUvrG.png)
+
 **Blurry image**
 
 Tweet by @elahmo: 
