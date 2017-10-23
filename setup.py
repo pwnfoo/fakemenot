@@ -18,6 +18,7 @@ REQUIRED = [
     'pytesseract',
     'twittersearch',
     'termcolor',
+    'Pillow',
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -34,7 +35,7 @@ setup(
     description=DESCRIPTION,
     entry_points={
         'console_scripts': [
-            'fakemenot = fakemenot.__init__:main',
+            'fakemenot = fakemenot.main:main',
         ],
     },
     long_description=long_description,
