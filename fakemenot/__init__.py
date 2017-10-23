@@ -162,8 +162,12 @@ def _do_ocr_and_lookup(img_obj):
 def _blow_up_image():
     try:
         img = Image.open(args.image)
-    except (OSError, IOError):
+    except FileNotFoundError:
         print(colored("[!] I couldn't find a file by that name. Fake you!",
+                      'red'))
+        return False
+    except OSError:
+        print(colored("[!] {} is not an image file!".format(args.image),
                       'red'))
         return False
 
