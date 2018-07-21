@@ -49,39 +49,5 @@ Output:
 
 ![](http://i.imgur.com/05ZeCxL.png)
 
-Tweet by @kumailn
 
-![](https://i.imgur.com/2b6CLR8.png)
-
-Output:
-
-![](https://i.imgur.com/kocbltC.png)
-
-Tweet by @TheEconomist
-
-![](https://i.imgur.com/dLwUvrG.png)
-
-Output:
-
-![](https://i.imgur.com/3ySjOvq.png)
-
-**Blurry image**
-
-Tweet by @elahmo: 
-
-![](https://i.imgur.com/QI6ZOrA.png)
-
-Output:
-
-![](https://i.imgur.com/FY5jTJT.png)
-
-**Fake image**
-
-Tweet by @elahmo: 
-
-![](https://i.imgur.com/zoDkJnf.png)
-
-Output:
-
-![](https://i.imgur.com/rd85pia.png)
 
